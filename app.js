@@ -7,15 +7,15 @@ const endpoint =
 
 var Guid = require('guid');
 
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/', function (req, res) {
 	var guid = Guid.create();
-	res.status(200).send('ok '+guid.value);
+	res.status(200).send(guid.value);
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {
