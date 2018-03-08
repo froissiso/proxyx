@@ -1,3 +1,4 @@
+// fjrois
 var express = require('express');
 const app = express();
 var request = require('request');
@@ -7,15 +8,11 @@ const endpoint =
 
 var Guid = require('guid');
 
+// Insert headers to avoid Access-Control-Allow-Origin issue when requesting directly fron the website.
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-});
-
-app.get('/', function (req, res) {
-	var guid = Guid.create();
-	res.status(200).send(guid.value);
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {
@@ -24,6 +21,14 @@ var server = app.listen(process.env.PORT || 3000, function () {
 });
 module.exports = server;
 
+// Homepage to test unique identifier generation
+app.get('/', function (req, res) {
+	var guid = Guid.create();
+	res.status(200).send(guid.value);
+});
+
+// Receive url as parameter and test post request 
+// (Deprecated)
 app.post('/proxy/:url', function(req,res){
 	console.log('params: ',req.params.url);
 
@@ -44,7 +49,7 @@ app.post('/proxy/:url', function(req,res){
 	res.send("POST received");
 });
 
-
+// Post emulating Postman request, directly to the HU endpoint. Includes randomly generated unique notification identifier in the body.
 app.post('/proxy/', function(req,res){
 	var generated_guid = Guid.create();
 	console.log('generated_uid: ',generated_guid.value);
@@ -63,12 +68,14 @@ app.post('/proxy/', function(req,res){
 		if (error){
 			console.log("Error making the request: ", error);
 		}
-		console.log(body);
+		else{
+			// console.log(body);
+			res.send("POST request received and sent");
+		}
 	});
-
-	res.send("POST received");
 });
 
+// Post emulating Postman request, first to the CORS-anywhere proxy and then to the HU endpoint. Includes randomly generated unique notification identifier in the body.
 app.post('/proxytocors/', function(req,res){
 	var generated_guid = Guid.create();
 	console.log('generated_uid: ',generated_guid.value);
@@ -87,19 +94,7 @@ app.post('/proxytocors/', function(req,res){
 		if (error){
 			console.log("Error making the request: ", error);
 		}
-		console.log(body);
+		// console.log(body);
+		res.send("POST received");
 	});
-
-	res.send("POST received");
 });
-
-
-
-
-
-
-// request(options, function (error, response, body) {
-//  if (error) throw new Error(error);
-
-//  console.log(body);
-// });

@@ -1,12 +1,12 @@
 {
   "name": "proxyx",
   "version": "1.0.0",
-  "description": "Postman emulator. Workaround for Denis Facebook tool.",
+  "description": "Simple server to receive requests and generate others with the proper format to reach the Head Unit.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "author": "",
+  "author": "fjrois",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
