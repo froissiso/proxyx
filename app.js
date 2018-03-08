@@ -7,18 +7,18 @@ const endpoint =
 
 var Guid = require('guid');
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 app.get('/', function (req, res) {
 	var guid = Guid.create();
 	res.status(200).send('ok '+guid.value);
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(8443, function () {
   var port = server.address().port;
   console.log('Express app listening at port %s', port);
 });
