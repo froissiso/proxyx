@@ -1,5 +1,6 @@
 // fjrois
 var express = require('express');
+var bodyParser = require('body-parser');
 const app = express();
 var request = require('request');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -14,6 +15,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+app.use(bodyParser.json());
 
 var server = app.listen(process.env.PORT || 3000, function () {
   var port = server.address().port;
@@ -52,20 +54,22 @@ app.post('/proxy/:url', function(req,res){
 // Post emulating Postman request, directly to the HU endpoint. Includes randomly generated unique notification identifier in the body.
 app.post('/proxy/', function(req,res){
 	var generated_guid = Guid.create();
+	var body = req.body;
 	console.log('generated_uid: ',generated_guid.value);
-	var headers = req.headers;
+	console.log("BODY: ",body);
+	// console.log("REQ: ",req);
 	var finorvin = "WDD1770031Z000032";
 	var lat = 48.745373;
 	var lon = 8.806573;
 	
-	if(typeof headers.finorvin !== 'undefined'){
-		finorvin = headers.finorvin;
+	if(typeof body.finorvin !== 'undefined'){
+		finorvin = body.finorvin;
 	}
-	if(typeof headers.lat !== 'undefined'){
-		lat = headers.lat;
+	if(typeof body.lat !== 'undefined'){
+		lat = body.lat;
 	}
-	if(typeof headers.lon !== 'undefined'){
-		lon = headers.lon;
+	if(typeof body.lon !== 'undefined'){
+		lon = body.lon;
 	}
 	
 	var options = { 
@@ -90,6 +94,11 @@ app.post('/proxy/', function(req,res){
 		}
 	});
 });
+
+
+/**
+ * DEPRECATED
+ */
 
 // Post emulating Postman request, first to the CORS-anywhere proxy and then to the HU endpoint. Includes randomly generated unique notification identifier in the body.
 app.post('/proxytocors/', function(req,res){
